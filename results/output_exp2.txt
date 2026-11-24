@@ -1,0 +1,58 @@
+======================================================================
+MINI-COURIER PLANNER
+======================================================================
+Parcels loaded : 10   Truck capacity : 40 kg
+Graph          : 8 nodes, 11 roads, depot = D
+
+--- PHASE 2a: parcels sorted by urgency (Merge Sort) ---
+ID      Weight Priority Deadline  Value  Dest
+P07          6        3        4      6  C7
+P02         15        9        6     12  C1
+P08          9        7        6     10  C2
+P04         12        8        8     11  C5
+P06         10        6       10      6  C6
+P01          8        7       12      7  C3
+P09         14        9       14      9  C3
+P05          7        5       18      5  C4
+P10          4        2       20      2  C1
+P03          5        4       24      4  C2
+
+--- PHASE 2b: 0/1 Knapsack (Dynamic Programming) ---
+DP table (rows = parcels in sorted order, columns = capacity in kg):
+cap          0   4   8  12  16  20  24  28  32  36  40
+none         0   0   0   0   0   0   0   0   0   0   0
+P07(w6)      0   0   6   6   6   6   6   6   6   6   6
+P02(w15)     0   0   6   6  12  12  18  18  18  18  18
+P08(w9)      0   0   6  10  16  16  22  22  28  28  28
+P04(w12)     0   0   6  11  16  17  22  27  28  33  33
+P06(w10)     0   0   6  11  16  17  22  27  28  33  34
+P01(w8)      0   0   7  11  16  18  23  27  29  34  35
+P09(w14)     0   0   7  11  16  18  23  27  29  34  35
+P05(w7)      0   0   7  11  16  18  23  27  29  34  35
+P10(w4)      0   2   7  11  16  18  23  27  29  34  36
+P03(w5)      0   2   7  11  16  20  23  27  31  34  38
+
+Best total value : 38
+Total weight     : 40 / 40 kg
+Selected parcels (5): P07, P08, P04, P01, P03
+Left for later trips (5): P02, P06, P09, P05, P10
+
+--- PHASE 3a: Dijkstra shortest distances (km) between depot and stops ---
+          D    C2    C3    C5    C7
+D         0     7     6    10    16
+C2        7     0     9     5    11
+C3        6     9     0     4    10
+C5       10     5     4     0     6
+C7       16    11    10     6     0
+
+--- PHASE 3b: Nearest-Neighbor delivery route ---
+Stop order  : D -> C3 -> C5 -> C2 -> C7 -> D
+Road path   : D -> C3 -> C5 -> C2 -> C5 -> C7 -> C5 -> C3 -> D
+Route length: 42 km
+
+--- Runtime of each step ---
+sorting                0.054 ms
+knapsack               0.056 ms
+dijkstra               0.052 ms
+nearest_neighbor       0.012 ms
+total                  0.175 ms

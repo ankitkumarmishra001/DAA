@@ -1,0 +1,57 @@
+======================================================================
+MINI-COURIER PLANNER
+======================================================================
+Parcels loaded : 10   Truck capacity : 40 kg
+Graph          : 8 nodes, 12 roads, depot = D
+
+--- PHASE 2a: parcels sorted by urgency (Merge Sort) ---
+ID      Weight Priority Deadline  Value  Dest
+P02         15        9        6     12  C1
+P08          9        7        6     10  C2
+P04         12        8        8     11  C5
+P06         10        6       10      6  C6
+P01          8        7       12      7  C3
+P09         14        9       14      9  C3
+P05          7        5       18      5  C4
+P10          4        2       20      2  C1
+P03          5        4       24      4  C2
+P07          6        3       30      3  C7
+
+--- PHASE 2b: 0/1 Knapsack (Dynamic Programming) ---
+DP table (rows = parcels in sorted order, columns = capacity in kg):
+cap          0   4   8  12  16  20  24  28  32  36  40
+none         0   0   0   0   0   0   0   0   0   0   0
+P02(w15)     0   0   0   0  12  12  12  12  12  12  12
+P08(w9)      0   0   0  10  12  12  22  22  22  22  22
+P04(w12)     0   0   0  11  12  12  22  23  23  33  33
+P06(w10)     0   0   0  11  12  16  22  23  27  33  33
+P01(w8)      0   0   7  11  12  18  22  23  29  33  34
+P09(w14)     0   0   7  11  12  18  22  23  29  33  34
+P05(w7)      0   0   7  11  15  18  22  26  29  33  34
+P10(w4)      0   2   7  11  15  18  22  26  29  33  35
+P03(w5)      0   2   7  11  15  18  22  26  29  33  35
+P07(w6)      0   2   7  11  15  18  22  26  29  33  35
+
+Best total value : 35
+Total weight     : 40 / 40 kg
+Selected parcels (4): P02, P08, P04, P10
+Left for later trips (6): P06, P01, P09, P05, P03, P07
+
+--- PHASE 3a: Dijkstra shortest distances (km) between depot and stops ---
+          D    C1    C2    C5
+D         0     4     7     3
+C1        4     0     3     7
+C2        7     3     0     5
+C5        3     7     5     0
+
+--- PHASE 3b: Nearest-Neighbor delivery route ---
+Stop order  : D -> C5 -> C2 -> C1 -> D
+Road path   : D -> C5 -> C2 -> C1 -> D
+Route length: 15 km
+
+--- Runtime of each step ---
+sorting                0.047 ms
+knapsack               0.049 ms
+dijkstra               0.051 ms
+nearest_neighbor       0.016 ms
+total                  0.163 ms
